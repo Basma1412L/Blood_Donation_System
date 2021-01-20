@@ -1,8 +1,8 @@
 venv/
 .vscode/
 __pycache__/
-.env/
-.migrations/
+env/
+migrations/
 
 # OS generated files #
 ######################
