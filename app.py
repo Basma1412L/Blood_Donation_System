@@ -34,6 +34,7 @@ def create_app(test_config=None):
       return response
 
   @app.route('/donors')
+  @requires_auth('get:donors')
   def retrive_donors():
       donors = Donor.query.all()
       if donors is None or len(donors) == 0:
@@ -83,6 +84,7 @@ def create_app(test_config=None):
       })
 
   @app.route('/appointments_donors')
+  @requires_auth('get:appointments_donors')
   def retrive_appointments_donors():
       appointments_donors = AppointmentsDonors.query.all()
       if appointments_donors is None or len(appointments_donors) == 0:
@@ -95,6 +97,7 @@ def create_app(test_config=None):
       })
 
   @app.route('/DonationCenter', methods=['POST'])
+  @requires_auth('create:DonationCenter')
   def create_donation_center():
       body = request.get_json()
       new_name= body.get('name', None)
@@ -125,6 +128,7 @@ def create_app(test_config=None):
 
   
   @app.route('/Appointment', methods=['POST'])
+  @requires_auth('create:Appointment')
   def create_appointment():
       body = request.get_json()
       new_donations_center= body.get('donations_center', None)
@@ -158,6 +162,7 @@ def create_app(test_config=None):
   
   
   @app.route('/Donor', methods=['POST'])
+  @requires_auth('create:Donor')
   def create_donor():
       body = request.get_json()
       new_name= body.get('name', None)
@@ -197,6 +202,7 @@ def create_app(test_config=None):
 
 
   @app.route('/Donation', methods=['POST'])
+  @requires_auth('create:Donation')
   def create_donation():
       body = request.get_json()
       new_donationCenter_id= body.get('donationCenter_id', None)
@@ -231,6 +237,7 @@ def create_app(test_config=None):
 
 
   @app.route('/AppointmentsDonors', methods=['POST'])
+  @requires_auth('create:AppointmentsDonors')
   def create_AppointmentsDonors():
       body = request.get_json()
       new_donor_id=body.get('donor_id', None)
@@ -257,6 +264,52 @@ def create_app(test_config=None):
       except Exception as error:
           print("\nerror => {}\n".format(error))
           abort(422)
+
+
+
+  @app.route('/donors/<int:donor_id>', methods=['DELETE'])
+  @requires_auth('delete:donors')
+  def delete_donor(donor_id):
+      try:
+          donor = Donor.query.filter(
+              Donor.id == donor_id).one_or_none()
+          if donor is None:
+              abort(404)
+          donor.delete()
+          selection = Donor.query.order_by(Donor.id).all()
+          current_donors = paginate_questions(request, selection)
+          return jsonify({
+              'success': True,
+              'deleted': donor_id,
+              'donors': current_donors,
+              'total_donors': len(Donor.query.all())
+          })
+      except Exception as error:
+          print("\nerror => {}\n".format(error))
+          abort(422)
+
+  @app.route('/donors/<int:donor_id>', methods=['PATCH'])
+  @requires_auth('update:donor')
+  def update_donor(auth,id):
+      body = request.get_json()
+      donor = Donor.query.filter_by(id=id).first_or_404()
+      try:
+          donor.name= body.get('name', donor.name)
+          donor.age = body.get('age', donor.age)
+          donor.gender = body.get('gender', donor.age)
+          donor.phone= body.get('phone', donor.phone)
+          donor.email= body.get('email', donor.email)
+          donor.blood_type= body.get('blood_type', donor.blood_type)
+          donor.update()
+          return jsonify({
+                  'success': True,
+                  'created': donor.id,
+                  'Donors_count': len(Donor.query.all())
+              })
+      except Exception as error:
+          print("\nerror => {}\n".format(error))
+          abort(422)
+
 APP = create_app()
 
 if __name__ == '__main__':

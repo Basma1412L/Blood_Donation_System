@@ -1,0 +1,100 @@
+donors = [
+    {
+        'name' : 'Ramy',
+        'age' : 25,
+        'gender' : 'Male',
+        'address' : '290 Bath Road',
+        'phone' : '3433336460',
+        'email' : 'ramy@gmail.com',
+        'blood_type' : 'A+'
+    },
+    {
+        'name' : 'Hady',
+        'age' : 25,
+        'gender' : 'Male',
+        'address' : '290 Bath Road',
+        'phone' : '3433336460',
+        'email' : 'hady@gmail.com',
+        'blood_type' : 'B+'
+    }, 
+    {
+        'name' : 'Mona',
+        'age' : 25,
+        'gender' : 'FeMale',
+        'address' : '290 Bath Road',
+        'phone' : '3433336460',
+        'email' : 'mona@gmail.com',
+        'blood_type' : 'O-'
+    }
+]
+
+donation_centers = [
+    {
+        'name' : 'Downtown Donation Center',
+        'address' : '159 King Road'
+    },
+    {
+        'name' : 'King Donation Center',
+        'address' : '172 Palace Road'
+    },
+    {
+        'name' : 'ETL Donation Center',
+        'address' : '23 Ring Road'
+    }
+]
+
+donations = [
+    {
+        'blood_type' :'A+',
+        'time' : '2021-01-01 10:05:03',
+         'donor_id' :  1
+         'donationCenter_id' : 1
+    }, 
+    {
+        'blood_type' :'B+',
+        'time' : '2021-01-01 11:05:03',
+         'donor_id' :  2
+         'donationCenter_id' : 2
+    },
+    {
+        'blood_type' :'O-',
+        'time' : '2021-01-01 10:05:03',
+         'donor_id' :  3
+         'donationCenter_id' : 3
+    }
+]
+
+appointments = [
+    {
+        'donations_center' : 1,
+        'time' : '2021-01-01 10:05:03',
+        'donors_limit' : 5,
+        'availibility' : True
+    },
+    {
+        'donations_center' : 2,
+        'time' : '2021-01-01 10:05:03',
+        'donors_limit' : 3,
+        'availibility' : True
+    },
+    {
+        'donations_center' : 3,
+        'time' : '2021-01-01 09:05:03',
+        'donors_limit' : 1,
+        'availibility' : False
+    }
+]
+
+appointmentsDonors = [
+    {
+        'donor_id' : 1,
+        'appointment_id' : 2 
+    }, 
+        {
+        'donor_id' : 2,
+        'appointment_id' : 2 
+    },    {
+        'donor_id' : 3,
+        'appointment_id' : 3 
+    }
+]
