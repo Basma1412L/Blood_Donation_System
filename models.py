@@ -65,7 +65,6 @@ class Donor(db.Model):
   def format(self):
     return {
       'id': self.id,
-      'type': self.type,
       'name' : self.name,
       'age' :self.age,
       'gender' : self.gender,
@@ -90,7 +89,7 @@ class Donation(db.Model):
 
   def __init__(self, donor_id, blood_type, time, donationCenter_id):
     self.donor_id = donor_id
-    self.blood_type = blood_id
+    self.blood_type = blood_type
     self.time = time
     self.donationCenter_id = donationCenter_id
 
@@ -164,10 +163,12 @@ class Appointment(db.Model):
   availibility = db.Column(db.Boolean, default=True)
 
 
-  def __init__(self, address, donations_ids, donor_id):
-    self.address = address
-    self.donations_ids = donations_ids
-    self.donor_id = donor_id
+  def __init__(self,donations_center, time,donors_limit, availibility):
+    self.donations_center = donations_center
+    self.time=time
+    self.donors_limit=donors_limit
+    self.availibility=availibility
+
 
   def insert(self):
     db.session.add(self)
@@ -190,10 +191,30 @@ class Appointment(db.Model):
 
 class AppointmentsDonors(db.Model):
 
-    id = db.Column(db.Integer, primary_key=True)
+  id = db.Column(db.Integer, primary_key=True)
+  donor_id = db.Column(db.Integer, db.ForeignKey('donor.id'))
+  appointment_id = db.Column(db.Integer, db.ForeignKey('appointment.id'))
+  donor = db.relationship( Donor, backref=db.backref('appointments_donors', cascade='all, delete'))
+  appointment = db.relationship( Appointment, backref=db.backref('appointments_donors', cascade='all, delete'))
+  
+  def __init__(self,donor_id,appointment_id):
+    self.donor_id = donor_id
+    self.appointment_id=appointment_id
 
-    donor_id = db.Column(db.Integer, db.ForeignKey('donor.id'))
-    appointment_id = db.Column(db.Integer, db.ForeignKey('appointment.id'))
+  def insert(self):
+    db.session.add(self)
+    db.session.commit()
+  
+  def update(self):
+    db.session.commit()
 
-    donor = db.relationship( Donor, backref=db.backref('appointments_donors', cascade='all, delete'))
-    appointment = db.relationship( Appointment, backref=db.backref('appointments_donors', cascade='all, delete'))
+  def delete(self):
+    db.session.delete(self)
+    db.session.commit()
+  
+  def format(self):
+    return {
+      'id': self.id,
+      'appointment_id': self.appointment_id,
+      'donor_id': self.donor_id
+    }

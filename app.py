@@ -3,10 +3,17 @@ from flask import Flask, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from models import *
+from auth import *
 
 
 RESULTS_PER_PAGE = 10
 
+
+# https://dev-16nawflo.us.auth0.com/authorize?audience=blood_donation&response_type=token&client_id=gMdV5Kv5iDUPf9JTuG9oqrFfRwYVAFfr&redirect_uri=http://localhost:5000
+# AUTH0_DOMAIN="dev-16nawflo.us.auth0.com"
+# AUTH0_CLIENT_ID="gMdV5Kv5iDUPf9JTuG9oqrFfRwYVAFfr"
+# AUTH0_JWT_API_AUDIENCE="blood_donation"
+# AUTH0_CALLBACK_URL="https://localhost:5000/tabs/user-page"
 
 def paginate_results(request, selection):
     page = request.args.get('page', 1, type=int)
@@ -35,29 +42,33 @@ def create_app(test_config=None):
 
   @app.route('/donors')
   @requires_auth('get:donors')
-  def retrive_donors():
+  def retrive_donors(auth):
       donors = Donor.query.all()
       if donors is None or len(donors) == 0:
           abort(404)
-      length = len(donors)
+      selection = Donor.query.order_by(Donor.id).all()
+      current_donors= paginate_results(request, selection)
       return jsonify({
           'success': True,
-          'donors': donors,
-          'total_donors': length
+          'donors': current_donors,
+          'donors_count': len(Donor.query.all())
       })
 
-  
   @app.route('/donations')
   def retrive_donations():
       donations = Donation.query.all()
+      print(donations)
       if donations is None or len(donations) == 0:
           abort(404)
       length = len(donations)
+      selection = Donation.query.order_by(Donation.id).all()
+      current_donations= paginate_results(request, selection)
       return jsonify({
           'success': True,
-          'donations': donations,
-          'total_donations': length
+          'current_donations': current_donations,
+          'current_donations_count': len(Donation.query.all())
       })
+
 
   @app.route('/donation_centers')
   def retrive_donation_centers():
@@ -65,40 +76,47 @@ def create_app(test_config=None):
       if donation_centers is None or len(donation_centers) == 0:
           abort(404)
       length = len(donation_centers)
+      selection = DonationCenter.query.order_by(DonationCenter.id).all()
+      current_donation_centers= paginate_results(request, selection)
       return jsonify({
           'success': True,
-          'donation_centers': donation_centers,
-          'total_donation_centers': length
+          'current_donation_centers': current_donation_centers,
+          'current_donation_centers_count': len(DonationCenter.query.all())
       })
 
   @app.route('/appointments')
-  def retrive_appointments():
+  @requires_auth('get:appointments')
+  def retrive_appointments(auth):
       appointments = Appointment.query.all()
       if appointments is None or len(appointments) == 0:
           abort(404)
       length = len(appointments)
+      selection = Appointment.query.order_by(Appointment.id).all()
+      current_appointments= paginate_results(request, selection)
       return jsonify({
           'success': True,
-          'appointments': appointments,
-          'total_appointments': length
+          'current_donation_centers': current_appointments,
+          'current_donation_centers_count': len(Appointment.query.all())
       })
 
   @app.route('/appointments_donors')
   @requires_auth('get:appointments_donors')
-  def retrive_appointments_donors():
+  def retrive_appointments_donors(auth):
       appointments_donors = AppointmentsDonors.query.all()
       if appointments_donors is None or len(appointments_donors) == 0:
           abort(404)
       length = len(appointments_donors)
+      selection = AppointmentsDonors.query.order_by(AppointmentsDonors.id).all()
+      current_appointments_donors= paginate_results(request, selection)
       return jsonify({
           'success': True,
-          'appointments_donors': appointments_donors,
-          'total_appointments_donors': length
+          'current_appointments_donors': current_appointments_donors,
+          'current_appointments_donors_count': len(Appointment.query.all())
       })
 
   @app.route('/DonationCenter', methods=['POST'])
   @requires_auth('create:DonationCenter')
-  def create_donation_center():
+  def create_donation_center(auth):
       body = request.get_json()
       new_name= body.get('name', None)
       new_address = body.get('address', None)
@@ -110,7 +128,7 @@ def create_app(test_config=None):
               donation_center.insert()
 
               selection = DonationCenter.query.order_by(DonationCenter.id).all()
-              current_centers = paginate_result(request, selection)
+              current_centers = paginate_results(request, selection)
 
               return jsonify({
                   'success': True,
@@ -129,23 +147,24 @@ def create_app(test_config=None):
   
   @app.route('/Appointment', methods=['POST'])
   @requires_auth('create:Appointment')
-  def create_appointment():
+  def create_appointment(auth):
       body = request.get_json()
       new_donations_center= body.get('donations_center', None)
       new_time = body.get('time', None)
       new_donors_limit = body.get('donors_limit', None)
       new_availibility= body.get('availibility', None)
       try:
-          if new_donations_center and new_time and new_donors_limit and new_availibility:
+          if new_donations_center and new_time and new_donors_limit:
               appointment = Appointment(
                   donations_center=new_donations_center,
                   time=new_time,
                   donors_limit=new_donors_limit,
                   availibility=new_availibility)
+              print(appointment)
               appointment.insert()
 
               selection = Appointment.query.order_by(Appointment.id).all()
-              current_appointments = paginate_result(request, selection)
+              current_appointments = paginate_results(request, selection)
 
               return jsonify({
                   'success': True,
@@ -163,13 +182,14 @@ def create_app(test_config=None):
   
   @app.route('/Donor', methods=['POST'])
   @requires_auth('create:Donor')
-  def create_donor():
+  def create_donor(auth):
       body = request.get_json()
       new_name= body.get('name', None)
       new_age = body.get('age', None)
       new_gender = body.get('gender', None)
+      new_address = body.get('address', None)
       new_phone= body.get('phone', None)
-      new_email= body.get('email', None)
+      new_email= body.get('email',None)
       new_blood_type= body.get('blood_type', None)
       try:
           if new_name and new_age and new_gender and new_phone and new_email and new_blood_type:
@@ -177,13 +197,14 @@ def create_app(test_config=None):
                   name=new_name,
                   age=new_age,
                   gender=new_gender,
+                  address = new_address,
                   phone=new_phone,
                   email=new_email,
                   blood_type=new_blood_type)
               donor.insert()
 
               selection = Donor.query.order_by(Donor.id).all()
-              current_donors= paginate_result(request, selection)
+              current_donors= paginate_results(request, selection)
 
               return jsonify({
                   'success': True,
@@ -196,14 +217,12 @@ def create_app(test_config=None):
       except Exception as error:
           print("\nerror => {}\n".format(error))
           abort(422)
-  return app
-
 
 
 
   @app.route('/Donation', methods=['POST'])
   @requires_auth('create:Donation')
-  def create_donation():
+  def create_donation(auth):
       body = request.get_json()
       new_donationCenter_id= body.get('donationCenter_id', None)
       new_donor_id=body.get('donor_id', None)
@@ -212,14 +231,14 @@ def create_app(test_config=None):
       try:
           if new_donationCenter_id and new_donor_id and new_blood_type and new_time:
               donation = Donation(
-                  donations_center_id=new_donationCenter_id,
-                  new_donor_id=donor_id,
+                  donationCenter_id=new_donationCenter_id,
+                  donor_id=new_donor_id,
                   blood_type=new_blood_type,
                   time=new_time)
               donation.insert()
 
               selection = Donation.query.order_by(Donation.id).all()
-              current_donations = paginate_result(request, selection)
+              current_donations = paginate_results(request, selection)
 
               return jsonify({
                   'success': True,
@@ -228,17 +247,16 @@ def create_app(test_config=None):
                   'donations_count': len(Donation.query.all())
               })
           else:
-              abort(404)
+              abort(400)
       except Exception as error:
           print("\nerror => {}\n".format(error))
           abort(422)
 
 
 
-
   @app.route('/AppointmentsDonors', methods=['POST'])
   @requires_auth('create:AppointmentsDonors')
-  def create_AppointmentsDonors():
+  def create_AppointmentsDonors(auth):
       body = request.get_json()
       new_donor_id=body.get('donor_id', None)
       new_appointment_id = body.get('appointment_id', None)
@@ -251,11 +269,11 @@ def create_app(test_config=None):
               appointmentDonor.insert()
 
               selection = AppointmentsDonors.query.order_by(AppointmentsDonors.id).all()
-              current_appointmentsDonors = paginate_result(request, selection)
+              current_appointmentsDonors = paginate_results  (request, selection)
 
               return jsonify({
                   'success': True,
-                  'created': appointmentsDonor.id,
+                  'created': appointmentDonor.id,
                   'appointmentsDonors': current_appointmentsDonors,
                   'appointmentsDonors_count': len(AppointmentsDonors.query.all())
               })
@@ -266,10 +284,9 @@ def create_app(test_config=None):
           abort(422)
 
 
-
   @app.route('/donors/<int:donor_id>', methods=['DELETE'])
   @requires_auth('delete:donors')
-  def delete_donor(donor_id):
+  def delete_donor(auth,donor_id):
       try:
           donor = Donor.query.filter(
               Donor.id == donor_id).one_or_none()
@@ -277,7 +294,7 @@ def create_app(test_config=None):
               abort(404)
           donor.delete()
           selection = Donor.query.order_by(Donor.id).all()
-          current_donors = paginate_questions(request, selection)
+          current_donors = paginate_results(request, selection)
           return jsonify({
               'success': True,
               'deleted': donor_id,
@@ -290,10 +307,12 @@ def create_app(test_config=None):
 
   @app.route('/donors/<int:donor_id>', methods=['PATCH'])
   @requires_auth('update:donor')
-  def update_donor(auth,id):
+  def update_donor(auth,donor_id):
       body = request.get_json()
-      donor = Donor.query.filter_by(id=id).first_or_404()
+      donor = Donor.query.filter(
+              Donor.id == donor_id).one_or_none()
       try:
+          print("I am here")
           donor.name= body.get('name', donor.name)
           donor.age = body.get('age', donor.age)
           donor.gender = body.get('gender', donor.age)
@@ -304,11 +323,48 @@ def create_app(test_config=None):
           return jsonify({
                   'success': True,
                   'created': donor.id,
-                  'Donors_count': len(Donor.query.all())
+                  'donors_count': len(Donor.query.all())
               })
       except Exception as error:
           print("\nerror => {}\n".format(error))
           abort(422)
+
+  @app.errorhandler(422)
+  def unprocessable(error):
+      return jsonify({
+                      "success": False, 
+                      "error": 422,
+                      "message": "unprocessable"
+                      }), 422
+
+
+
+  @app.errorhandler(400)
+  def bad_request(error):
+      return jsonify({
+          "success": False,
+          "error": 400,
+          "message": "bad request"
+      }), 400
+
+  @app.errorhandler(404)
+  def not_found(error):
+      return jsonify({
+          "success": False,
+          "error": 404,
+          "message": "resource not found"
+      }), 404
+
+
+  @app.errorhandler(AuthError)
+  def authentification_failed(error):
+      return jsonify({
+          "success": False,
+          "error": AuthError,
+          "message": "authentification fails"
+                      }), AuthError
+  return app
+
 
 APP = create_app()
 

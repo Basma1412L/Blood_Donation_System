@@ -5,6 +5,7 @@ from jose import jwt
 from urllib.request import urlopen
 
 
+
 AUTH0_DOMAIN = 'dev-16nawflo.us.auth0.com'
 ALGORITHMS = ['RS256']
 API_AUDIENCE = 'blood_donation'
