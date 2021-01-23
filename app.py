@@ -13,7 +13,6 @@ RESULTS_PER_PAGE = 10
 # AUTH0_DOMAIN="dev-16nawflo.us.auth0.com"
 # AUTH0_CLIENT_ID="gMdV5Kv5iDUPf9JTuG9oqrFfRwYVAFfr"
 # AUTH0_JWT_API_AUDIENCE="blood_donation"
-# AUTH0_CALLBACK_URL="https://localhost:5000/tabs/user-page"
 
 def paginate_results(request, selection):
     page = request.args.get('page', 1, type=int)
@@ -27,7 +26,7 @@ def paginate_results(request, selection):
 def create_app(test_config=None):
   # create and configure the app
   app = Flask(__name__)
-  setup_db(app)
+  db = setup_db(app)
   CORS(app)
 
   @app.after_request
