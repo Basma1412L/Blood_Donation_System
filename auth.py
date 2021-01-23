@@ -5,23 +5,24 @@ from jose import jwt
 from urllib.request import urlopen
 
 
-
 AUTH0_DOMAIN = 'dev-16nawflo.us.auth0.com'
 ALGORITHMS = ['RS256']
 API_AUDIENCE = 'blood_donation'
 
-## AuthError Exception
+# AuthError Exception
 '''
 AuthError Exception
 A standardized way to communicate auth failure modes
 '''
+
+
 class AuthError(Exception):
     def __init__(self, error, status_code):
         self.error = error
         self.status_code = status_code
 
 
-## Auth Header
+# Auth Header
 
 def get_token_auth_header():
     """Obtains the Access Token from the Authorization Header
@@ -30,14 +31,14 @@ def get_token_auth_header():
         auth = request.headers.get("Authorization", None)
         if not auth:
             raise AuthError({"code": "authorization_header_missing",
-                            "description":
-                                "Authorization header is expected"}, 401)
+                             "description":
+                             "Authorization header is expected"}, 401)
         parts = auth.split()
-        if  len(parts) != 2 or parts[0].lower() != "bearer":
+        if len(parts) != 2 or parts[0].lower() != "bearer":
             raise AuthError({"code": "invalid_header",
-                            "description":
-                                "Authorization header must be"
-                                " Bearer token"}, 401)
+                             "description":
+                             "Authorization header must be"
+                             " Bearer token"}, 401)
         token = parts[1]
         return token
     except Exception as error:
@@ -47,10 +48,10 @@ def get_token_auth_header():
 def check_permissions(permission, payload):
     try:
         if 'permissions' not in payload:
-                            raise AuthError({
-                                'code': 'invalid_claims',
-                                'description': 'JWT missing Permissions.'
-                            }, 400)
+            raise AuthError({
+                'code': 'invalid_claims',
+                'description': 'JWT missing Permissions.'
+            }, 400)
 
         if permission not in payload['permissions']:
             raise AuthError({
@@ -63,7 +64,6 @@ def check_permissions(permission, payload):
         print("Permission:", permission)
         print("Payload:", payload)
         abort(401)
-
 
 
 def verify_decode_jwt(token):
@@ -115,13 +115,13 @@ def verify_decode_jwt(token):
                     'description': 'Unable to parse authentication token.'
                 }, 400)
         raise AuthError({
-                    'code': 'invalid_header',
+            'code': 'invalid_header',
                     'description': 'Unable to find the appropriate key.'
-                }, 400)
+        }, 400)
     except Exception as error:
         print(error)
         abort(401)
-    
+
 
 def requires_auth(permission=''):
     def requires_auth_decorator(f):
