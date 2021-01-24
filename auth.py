@@ -3,11 +3,12 @@ from flask import request, _request_ctx_stack, abort
 from functools import wraps
 from jose import jwt
 from urllib.request import urlopen
+import os
 
 
-AUTH0_DOMAIN = 'dev-16nawflo.us.auth0.com'
-ALGORITHMS = ['RS256']
-API_AUDIENCE = 'blood_donation'
+AUTH0_DOMAIN = os.getenv('AUTH0_DOMAIN')
+ALGORITHMS = os.getenv('ALGORITHMS')
+API_AUDIENCE = os.getenv('API_AUDIENCE')
 
 # AuthError Exception
 '''
@@ -107,7 +108,8 @@ def verify_decode_jwt(token):
             except jwt.JWTClaimsError:
                 raise AuthError({
                     'code': 'invalid_claims',
-                    'description': 'Incorrect claims. Please, check the audience and issuer.'
+                    'description':
+                    'Incorrect claims. Please, check the audience and issuer.'
                 }, 401)
             except Exception:
                 raise AuthError({

@@ -6,14 +6,44 @@ from app import create_app
 from models import *
 
 
-DB_HOST = os.getenv('DB_HOST', '127.0.0.1:5432')
-DB_USER = os.getenv('DB_USER', '')
-DB_PASSWORD = os.getenv('DB_PASSWORD', '')
-DB_TEST_NAME = os.getenv('DB_NAME', 'blood_system_test')
+DB_HOST = os.getenv('DB_HOST')
+DB_USER = os.getenv('DB_USER')
+DB_PASSWORD = os.getenv('DB_PASSWORD')
+DB_TEST_NAME = os.getenv('DB_TEST_NAME')
 database_path = 'postgresql+psycopg2://{}:{}@{}/{}'.format(
     DB_USER, DB_PASSWORD, DB_HOST, DB_TEST_NAME)
-Token_manager = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkkzbktsM2lST0FNM21odjhjSm9hQiJ9.eyJpc3MiOiJodHRwczovL2Rldi0xNm5hd2Zsby51cy5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NjAwOGIwMTI0NDFmZDYwMDcwODFhOGFmIiwiYXVkIjoiYmxvb2RfZG9uYXRpb24iLCJpYXQiOjE2MTE0NDgxOTIsImV4cCI6MTYxMTQ1NTM5MiwiYXpwIjoiZ01kVjVLdjVpRFVQZjlKVHVHOW9xckZmUndZVkFGZnIiLCJzY29wZSI6IiIsInBlcm1pc3Npb25zIjpbImNyZWF0ZTpBcHBvaW50bWVudCIsImNyZWF0ZTpBcHBvaW50bWVudHNEb25vcnMiLCJjcmVhdGU6RG9uYXRpb24iLCJjcmVhdGU6RG9uYXRpb25DZW50ZXIiLCJjcmVhdGU6RG9ub3IiLCJkZWxldGU6ZG9ub3JzIiwiZ2V0OmFwcG9pbnRtZW50cyIsImdldDphcHBvaW50bWVudHNfZG9ub3JzIiwiZ2V0OmRvbmF0aW9ucyIsImdldDpkb25vcnMiLCJ1cGRhdGU6ZG9ub3IiXX0.NNKVw9X_5aDXHj50rC_5H5s194tYRdR9lmG1R4xCfRwleKleBjZZE2pKrPkrEZwpf8NxJtEwCvGTqJbc_avek_iyYYRO0j6K2y4pJfIq_a-7GaFPyhxAfckDccHC084A8WirpEVKj2P9NHHgfW3mI4UxXfozjMT69Zbq0DtRhpVyLfomAkieoCTRwsVRFp57ZDR-B1QU-nErQeIucElBRcrMVRNAIwlS9iLb1ucRECIBfwJN4wPCb4RdLGoOPQzlSZJnFnJKRQv-eobAgtksavVemIbva1Xsn75V1DqBnTy_97IR7GXon7NLaLvizhJe1hWk8w8otYtOXIss13CS2Q"
-Token_donor = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkkzbktsM2lST0FNM21odjhjSm9hQiJ9.eyJpc3MiOiJodHRwczovL2Rldi0xNm5hd2Zsby51cy5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NjAwYTBiMjQ3ZmM5MTQwMDY5OWE5YWJiIiwiYXVkIjoiYmxvb2RfZG9uYXRpb24iLCJpYXQiOjE2MTE0NDg0MjcsImV4cCI6MTYxMTQ1NTYyNywiYXpwIjoiZ01kVjVLdjVpRFVQZjlKVHVHOW9xckZmUndZVkFGZnIiLCJzY29wZSI6IiIsInBlcm1pc3Npb25zIjpbImNyZWF0ZTpEb25hdGlvbiIsImNyZWF0ZTpEb25vciIsImdldDphcHBvaW50bWVudHMiLCJnZXQ6YXBwb2ludG1lbnRzX2Rvbm9ycyJdfQ.T1hBE_LY825D3GQV1ZDSScr8VI4y2e2Xt-X9SIg-YIamF0aUlhdnM9nsiW2nTwRRFve0VhRD0EDStn-sm6rBNfMqVZW0W-992EF5jCpMyvw8JJASULtoYdOVKiBbIGuvyFHApBUi-OLoRTspSv8eUYfV1MDdQupJ4MhdQakbabtDwuM04vhS7u0TLm_20RyaIZmHANV52H86P6IEVOPt00CSF3JFsZJp8nf3aUKJLowKETLrqK7ZFI-OYUno_uTFQYoTeaYTax2Uww_rh84smXfjZawzNdQiaJp0Y1jD47fTECp6gYdchIDC0pvy-8SI0P_3ypiy58NnuDFL0Pp-qg"
+Token_manager = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImt'
+'pZCI6IkkzbktsM2lST0FNM21odjhjSm9hQiJ9.eyJpc3MiOiJodHRwcz'
+'ovL2Rldi0xNm5hd2Zsby51cy5hdXRoMC5jb20vIiwic3ViIjoi'
+'YXV0aDB8NjAwOGIwMTI0NDFmZDYwMDcwODFhOGFmIiwiYXVkIjoi'
+'Ymxvb2RfZG9uYXRpb24iLCJpYXQiOjE2MTE0NzA2MTgsImV4cCI6M'
+'TYxMTQ3NzgxOCwiYXpwIjoiZ01kVjVLdjVpRFVQZjlKVHVHOW9xckZm'
+'UndZVkFGZnIiLCJzY29wZSI6IiIsInBlcm1pc3Npb25zIjpbImNyZWF0'
+'ZTpBcHBvaW50bWVudCIsImNyZWF0ZTpBcHBvaW50bWVudHNEb25vcnMiL'
+'CJjcmVhdGU6RG9uYXRpb24iLCJjcmVhdGU6RG9uYXRpb25DZW50Z'
+'XIiLCJjcmVhdGU6RG9ub3IiLCJkZWxldGU6ZG9ub3JzIiwiZ2V0Om
+'FwcG9pbnRtZW50cyIsImdldDphcHBvaW50bWVudHNfZG9ub3JzIiwi'
+'Z2V0OmRvbmF0aW9ucyIsImdldDpkb25vcnMiLCJ1cGRhdGU6ZG9ub3IiXX0'
+'.ujRi-OU_odnBAP4j4b7xu7sldwd2ZSMe757eMD5bXPOt73Oo6TImxRROuWi'
+'Y9CgqKNSahEGOLUX7oPHbPHS1stKAzzW9SV4qv_JKfCRVe1nUTF5TFJvI9pc9'
+'31AojBJcaPAofoP9bDfXJej1Ynd69kCcEr-FnEoi5YD22-INnzyeXhhLCgigE8'
+'fx4PVUAksZKL43rMtcyMYArBXY7u_dhaXFDVJ6xCUCp-'
+'ZI5ZDlLxZj-W7MCrJPYUfCAZ4a0GFMKsSK6qV9Z2JYhlMGp-'
+'9QrWq2DWUdKO5GbXoOW8fnBdvo1BDWDJmHygrymniKW_qd5PqOT3RKdiLq1UU1wHK2hQ'
+Token_donor = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6'
+'IkkzbktsM2lST0FNM21odjhjSm9hQiJ9'
+'.eyJpc3MiOiJodHRwczovL2Rldi0xNm5hd2Zsby51cy5hdXR'
+'oMC5jb20vIiwic3ViIjoiYXV0aDB8NjAwYTBiMjQ3ZmM5MTQwMDY5OWE5YWJiIiw'
+'iYXVkIjoiYmxvb2RfZG9uYXRpb24iLCJpYXQiOjE2MTE0NzA0Nj'
+'csImV4cCI6MTYxMTQ3NzY2NywiYXpwIjoiZ01kVjVLdjVpRFVQZjlKVHVHOW9xck'
+'ZmUndZVkFGZnIiLCJzY29wZSI6IiIsInBlcm1pc3Npb25zIjpbImNyZWF0ZTpEb2'
+'5hdGlvbiIsImNyZWF0ZTpEb25vci'
+'IsImdldDphcHBvaW50bWVudHMiLCJnZXQ6YXBwb2ludG1lbnRzX2Rvbm9ycyJdfQ.'
+'lXUX1JBOkjof4CJA1l2y8JEwdThMGxO6UFtQT-_SCDsZKBc5Yv6doL_tq27Or2MTx6NgN'
+'ga3wXuo4VWNTdkJzUzUDa_5x6Op5V-h4UVuP1AWWxV7Cw8lq8w7p38_TzEPgeOwtNCXJ9ps'
+'lbX5PpCYyBHVuvQ3DtEW5dyCsmAyFBawudOgWB_mrRmDaizVDZLFMkKyr0WxtkVYatoT4fBNp'
+'4wWpzhxk8Hi65gaP0OoMWQbdJZEeb0QNgJ-wPYr2Hl_aLak3kz3XwdiMyl7FEb-mi0Ei1-PrI3s'
+'KBcawBzkHHhjzgB3q6YnygmGDfrH0s3Tea3PhdW0hVW_COelWr88Qw'
 headers = {'Content-Type': 'application/json',
            'Authorization': 'Bearer ' + Token_manager
            }
@@ -167,7 +197,8 @@ class BloodSystemTestCase(unittest.TestCase):
         self.assertEqual(data['success'], False)
 
     def test_success_create_donor(self):
-        res = self.client().post('/Donor', json=self.new_donor, headers=self.headers)
+        res = self.client().post(
+            '/Donor', json=self.new_donor, headers=self.headers)
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
@@ -175,7 +206,8 @@ class BloodSystemTestCase(unittest.TestCase):
         self.assertTrue(data['donors_count'])
 
     def test_fail_create_donor(self):
-        res = self.client().post('/Donor/45', json=self.new_donor, headers=self.headers)
+        res = self.client().post(
+            '/Donor/45', json=self.new_donor, headers=self.headers)
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 404)
         self.assertEqual(data['success'], False)

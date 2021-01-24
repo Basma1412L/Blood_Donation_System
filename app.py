@@ -188,7 +188,10 @@ def create_app(test_config=None):
         new_email = body.get('email', None)
         new_blood_type = body.get('blood_type', None)
         try:
-            if new_name and new_age and new_gender and new_phone and new_email and new_blood_type:
+            if (
+                new_name and new_age and new_gender
+                and new_phone and new_email and new_blood_type
+            ):
                 donor = Donor(
                     name=new_name,
                     age=new_age,
@@ -223,7 +226,10 @@ def create_app(test_config=None):
         new_blood_type = body.get('blood_type', None)
         new_time = body.get('time', None)
         try:
-            if new_donationCenter_id and new_donor_id and new_blood_type and new_time:
+            if (
+                new_donationCenter_id and new_donor_id
+                and new_blood_type and new_time
+            ):
                 donation = Donation(
                     donationCenter_id=new_donationCenter_id,
                     donor_id=new_donor_id,
@@ -269,7 +275,8 @@ def create_app(test_config=None):
                     'success': True,
                     'created': appointmentDonor.id,
                     'appointmentsDonors': current_appointmentsDonors,
-                    'appointmentsDonors_count': len(AppointmentsDonors.query.all())
+                    'appointmentsDonors_count':
+                    len(AppointmentsDonors.query.all())
                 })
             else:
                 abort(404)
