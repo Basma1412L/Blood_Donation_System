@@ -12,45 +12,39 @@ DB_PASSWORD = os.getenv('DB_PASSWORD')
 DB_TEST_NAME = os.getenv('DB_TEST_NAME')
 database_path = 'postgresql+psycopg2://{}:{}@{}/{}'.format(
     DB_USER, DB_PASSWORD, DB_HOST, DB_TEST_NAME)
-Token_manager = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImt'
-'pZCI6IkkzbktsM2lST0FNM21odjhjSm9hQiJ9.eyJpc3MiOiJodHRwcz'
-'ovL2Rldi0xNm5hd2Zsby51cy5hdXRoMC5jb20vIiwic3ViIjoi'
-'YXV0aDB8NjAwOGIwMTI0NDFmZDYwMDcwODFhOGFmIiwiYXVkIjoi'
-'Ymxvb2RfZG9uYXRpb24iLCJpYXQiOjE2MTE0NzA2MTgsImV4cCI6M'
-'TYxMTQ3NzgxOCwiYXpwIjoiZ01kVjVLdjVpRFVQZjlKVHVHOW9xckZm'
-'UndZVkFGZnIiLCJzY29wZSI6IiIsInBlcm1pc3Npb25zIjpbImNyZWF0'
-'ZTpBcHBvaW50bWVudCIsImNyZWF0ZTpBcHBvaW50bWVudHNEb25vcnMiL'
-'CJjcmVhdGU6RG9uYXRpb24iLCJjcmVhdGU6RG9uYXRpb25DZW50Z'
-'XIiLCJjcmVhdGU6RG9ub3IiLCJkZWxldGU6ZG9ub3JzIiwiZ2V0Om
-'FwcG9pbnRtZW50cyIsImdldDphcHBvaW50bWVudHNfZG9ub3JzIiwi'
-'Z2V0OmRvbmF0aW9ucyIsImdldDpkb25vcnMiLCJ1cGRhdGU6ZG9ub3IiXX0'
-'.ujRi-OU_odnBAP4j4b7xu7sldwd2ZSMe757eMD5bXPOt73Oo6TImxRROuWi'
-'Y9CgqKNSahEGOLUX7oPHbPHS1stKAzzW9SV4qv_JKfCRVe1nUTF5TFJvI9pc9'
-'31AojBJcaPAofoP9bDfXJej1Ynd69kCcEr-FnEoi5YD22-INnzyeXhhLCgigE8'
-'fx4PVUAksZKL43rMtcyMYArBXY7u_dhaXFDVJ6xCUCp-'
-'ZI5ZDlLxZj-W7MCrJPYUfCAZ4a0GFMKsSK6qV9Z2JYhlMGp-'
-'9QrWq2DWUdKO5GbXoOW8fnBdvo1BDWDJmHygrymniKW_qd5PqOT3RKdiLq1UU1wHK2hQ'
-Token_donor = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6'
-'IkkzbktsM2lST0FNM21odjhjSm9hQiJ9'
-'.eyJpc3MiOiJodHRwczovL2Rldi0xNm5hd2Zsby51cy5hdXR'
-'oMC5jb20vIiwic3ViIjoiYXV0aDB8NjAwYTBiMjQ3ZmM5MTQwMDY5OWE5YWJiIiw'
-'iYXVkIjoiYmxvb2RfZG9uYXRpb24iLCJpYXQiOjE2MTE0NzA0Nj'
-'csImV4cCI6MTYxMTQ3NzY2NywiYXpwIjoiZ01kVjVLdjVpRFVQZjlKVHVHOW9xck'
-'ZmUndZVkFGZnIiLCJzY29wZSI6IiIsInBlcm1pc3Npb25zIjpbImNyZWF0ZTpEb2'
-'5hdGlvbiIsImNyZWF0ZTpEb25vci'
-'IsImdldDphcHBvaW50bWVudHMiLCJnZXQ6YXBwb2ludG1lbnRzX2Rvbm9ycyJdfQ.'
-'lXUX1JBOkjof4CJA1l2y8JEwdThMGxO6UFtQT-_SCDsZKBc5Yv6doL_tq27Or2MTx6NgN'
-'ga3wXuo4VWNTdkJzUzUDa_5x6Op5V-h4UVuP1AWWxV7Cw8lq8w7p38_TzEPgeOwtNCXJ9ps'
-'lbX5PpCYyBHVuvQ3DtEW5dyCsmAyFBawudOgWB_mrRmDaizVDZLFMkKyr0WxtkVYatoT4fBNp'
-'4wWpzhxk8Hi65gaP0OoMWQbdJZEeb0QNgJ-wPYr2Hl_aLak3kz3XwdiMyl7FEb-mi0Ei1-PrI3s'
-'KBcawBzkHHhjzgB3q6YnygmGDfrH0s3Tea3PhdW0hVW_COelWr88Qw'
+Token_manager = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkkzbktsM2lST0F'\
+'NM21odjhjSm9hQi'\
+'J9.eyJpc3MiOiJodHRwczovL2Rldi0xNm5hd2Zsby51cy5hdXRoMC5jb20vIiwic3ViIjoiYXV'\
+'0aDB8NjAwOGIwMTI0NDFmZDYwMDcwODFhOGFmIiwiYXVkIjoiYmxvb2RfZG9uYXRpb24iLCJpY'\
+'XQiOjE2MTE1MDE0NjAsImV4cCI6MTYxMTUwODY2MCwiYXpwIjoiZ01kVjVLdjVpRFVQZjlKVHV'\
+'HOW9xckZmUndZVkFGZnIiLCJzY29wZSI6IiIsInBlcm1pc3Npb25zIjpbImNyZWF0ZTpBcHBva'\
+'W50bWVudCIsImNyZWF0ZTpBcHBvaW50bWVudHNEb25vcnMiLCJjcmVhdGU6RG9uYXRpb24iLCJ'\
+'jcmVhdGU6RG9uYXRpb25DZW50ZXIiLCJjcmVhdGU6RG9ub3IiLCJkZWxldGU6ZG9ub3JzIiwiZ'\
+'2V0OmFwcG9pbnRtZW50cyIsImdldDphcHBvaW50bWVudHNfZG9ub3JzIiwiZ2V0OmRvbmF0aW9'\
+'ucyIsImdldDpkb25vcnMiLCJ1cGRhdGU6ZG9ub3IiXX0.qC2zBHc8uad7YtCPPwgh-qtPnAjhJ'\
+'8sWFBlZfaR3tFlYk_PdJolcpZ0bWPnl4gaZLUusD1vZ8BOUCxnHuiDQ3fxbmRMj7WEmBZd_w3r'\
+'O_5NMFOjfgCH7EPfhnCl7q63IQTgboIFE8SCPrGGJwoW9z7SOpG29meTQmhsLjrEK_o1bDYcmp'\
+'WqukbejUKF5GUYDBQxoHsKrCqaPq5najq39LxTVC9c294aJ77-Gpr2EuuNsYA_Bdrz4JAB7DwQ'\
+'dMmh05nQjPC7qPTfwN3j3cfauFzG4mVVLQ6Ybmqj-MWmfQk-'\
+'JUpVq5QwZEdZn6ItvVJEZrqVGCS50ny4HoUKxpr4LWg'
+Token_donor = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkkzbktsM2lST0FNM'\
+'21odjhjSm9hQi'\
+'J9.eyJpc3MiOiJodHRwczovL2Rldi0xNm5hd2Zsby51cy5hdXRoMC5jb20vIiwic3ViIjoiYXV'\
+'0aDB8NjAwYTBiMjQ3ZmM5MTQwMDY5OWE5YWJiIiwiYXVkIjoiYmxvb2RfZG9uYXRpb24iLCJpY'\
+'XQiOjE2MTE1MDE1MjgsImV4cCI6MTYxMTUwODcyOCwiYXpwIjoiZ01kVjVLdjVpRFVQZjlKVHV'\
+'HOW9xckZmUndZVkFGZnIiLCJzY29wZSI6IiIsInBlcm1pc3Npb25zIjpbImNyZWF0ZTpEb25hd'\
+'GlvbiIsImNyZWF0ZTpEb25vciIsImdldDphcHBvaW50bWVudHMiLCJnZXQ6YXBwb2ludG1lbnR'\
+'zX2Rvbm9ycyJdfQ.zEcF4R6Jdx0yFk_PA6jt9K2tLq5mgFSqHF6_O9XznY6dkGapzI7zQTsdH6'\
+'A1pGSo81mUJjX1yYcnbrmjVO_ILPvDtRPClAMm5SXyFWP34bliQn3Ol1J4eTEyhvQudyEtuEH6'\
+'z43rVOje86AuJsXF4wQFmbvzvrk9JYWaHyQcT7EyoK-aS7ALSRj-HhcxhzeGpIlnq1FNUWkd18'\
+'IXaAxJpz6aL3Evz0zCmN3Ur6jljEpgnQbFDQLtpv3PehSACp7r9vtXOw1VDPmTP0b8tyBL88_c'\
+'gu_UGr4HAjZ-pHAmI3aBiOeweJa_9C-5CdsLPbNrTe5SND7BEVsdsHlA0vYsog'
 headers = {'Content-Type': 'application/json',
            'Authorization': 'Bearer ' + Token_manager
            }
 headers_donor = {'Content-Type': 'application/json',
                  'Authorization': 'Bearer ' + Token_donor
                  }
-
 
 class BloodSystemTestCase(unittest.TestCase):
 
